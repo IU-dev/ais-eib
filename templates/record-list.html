@@ -9,7 +9,7 @@
         {% if record_list | length > 0 %}
         <ul class="card-text">
             {% for record in record_list %}
-            <li><a href="/record/show/{{ record.id }}">{{ record.header }}</a> (врач {{ record.doctor }})
+            <li><a href="/record/show/{{ record.id }}">{{ record.header }}</a>
             {% endfor %}
             {% if auth_user %}
                 <br><br>
