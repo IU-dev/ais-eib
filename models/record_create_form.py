@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms import PasswordField
 from wtforms import FileField
+from wtforms import TextAreaField
 from wtforms import SubmitField
 from wtforms.validators import DataRequired
 from models.user import UserRepository
@@ -13,10 +14,8 @@ import os
 
 
 class RecordCreateForm(FlaskForm):
-    patient = StringField('ИД пациента', validators=[DataRequired()])
-    doctor = StringField('ИД врача', validators=[DataRequired()])
     header = StringField('Заголовок', validators=[DataRequired()])
-    body = StringField('Текст записи', validators=[DataRequired()])
+    body = TextAreaField('Текст записи', validators=[DataRequired()])
 
     submit = SubmitField('Создать запись')
 
@@ -24,9 +23,9 @@ class RecordCreateForm(FlaskForm):
         super(RecordCreateForm, self).__init__()
         self._repository = repository
 
-    def create_user(self):
-        patient = self.patient.data
-        doctor = self.doctor.data
+    def create_record(self, id, doc):
+        patient = id
+        doctor = doc.id
         header = self.header.data
         body = self.body.data
         record = Record(None, patient, doctor, header, body)

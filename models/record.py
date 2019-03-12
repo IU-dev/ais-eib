@@ -29,8 +29,8 @@ class RecordRepository():
     def create(self, record: Record):
         self._db.execute('''
         INSERT INTO record (patient, doctor, header, body)
-        VALUES(?,?,?,?,?)
-        ''', (record.patient, record.doctor, record.header, record.body))
+        VALUES(?,?,?,?)
+        ''', (str(record.patient), str(record.doctor), str(record.header), str(record.body)))
 
     def get_list(self, limit=0, offset=0):
         cursor = self._db.create_cursor()
@@ -44,7 +44,7 @@ class RecordRepository():
 
     def get_list_for_patient(self, patient):
         cursor = self._db.create_cursor()
-        cursor.execute('''SELECT * FROM record WHERE patient = ? ORDER BY id DESC''', (patient))
+        cursor.execute('''SELECT * FROM record WHERE patient = ? ORDER BY id DESC''', (str(patient)))
         data = cursor.fetchall()
         return list(map(self._data_to_model, data))
 

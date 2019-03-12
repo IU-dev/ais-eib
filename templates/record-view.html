@@ -1,0 +1,14 @@
+{% extends "__base_template.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ record.header }}</h5>
+        <div class="card-text mb-1">
+            {{ record.body }}
+        </div>
+        Врач: {{ doctor.display }}, {{ doctor.position }}</a>
+    </div>
+</div>
+
+{% endblock %}

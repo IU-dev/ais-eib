@@ -53,6 +53,7 @@ def init_route(app: Flask, db: DB):
         news_repository.install()
         user_repository.install()
         patient_repository.install()
+        record_repository.install()
         return render_template(
             'install-success.html',
             title="Успешно | Установщик АИС ЭИБ"
@@ -101,25 +102,41 @@ def init_route(app: Flask, db: DB):
             form=form
         )
 
-    @app.route('/record', methods=['GET'])
-    def record_list():
-        record_list = record_repository.get_list()
+    @app.route('/record/<int:id>', methods=['GET'])
+    def record_list_by_patient(id: int):
+        record_list = record_repository.get_list_for_patient(id)
+        patient = patient_repository.get_by_id(id)
         return render_template(
             'record-list.html',
-            title='Список записей | АИС ЭИБ',
-            record_list=record_list
+            title='По пациенту ' + str(patient.name) +' | АИС ЭИБ',
+            record_list=record_list,
+            patient = patient
         )
 
-    @app.route('/record/create', methods=['GET', 'POST'])
-    def record_create_form():
+    @app.route('/record/show/<int:id>')
+    def record_show(id: int):
+        record = record_repository.get_by_id(id)
+        doctor = user_repository.get_by_id(record.doctor)
+        patient = patient_repository.get_by_id(record.patient)
+        return render_template(
+            'record-view.html',
+            title="Просмотр записи | АИС ЭИБ",
+            record=record,
+            doctor=doctor
+        )
+
+    @app.route('/record/create/<int:id>', methods=['GET', 'POST'])
+    def record_create_form(id: int):
         form = RecordCreateForm(record_repository)
         if form.validate_on_submit():
-            form.create_user()
-            return redirect('/record')
+            doc = auth.get_user()
+            form.create_record(id, doc)
+            return redirect('/record/' + str(id))
         return render_template(
             'record-create.html',
             title='Создать запись | АИС ЭИБ',
-            form=form
+            form=form,
+            id = id
         )
 
     @app.route('/user/delete/<int:id>')
