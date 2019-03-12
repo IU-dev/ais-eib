@@ -1,0 +1,23 @@
+{% extends '__base_template.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Пациенты</h5>
+        {% if patient_list | length > 0 %}
+        <ul class="card-text">
+            {% for patient in patient_list %}
+            <li>{{ patient.name }} ({{ patient.id }}, бум. {{ patient.cardno }})
+                {% if auth_user.position == "Администратор" %}
+                <a href="/patient/delete/{{ patient.id }}">(удалить)</a>
+                {% endif %}</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <div class="card-title">
+            Список пациентов пуст
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

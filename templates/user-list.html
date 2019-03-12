@@ -1,0 +1,23 @@
+{% extends '__base_template.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Пользователи</h5>
+        {% if user_list | length > 0 %}
+        <ul class="card-text">
+            {% for user in user_list %}
+            <li>{{ user.display }} ({{ user.position }}, {{ user.login }})
+                {% if auth_user.position == "Администратор" %}
+                <a href="/user/delete/{{ user.id }}">(удалить)</a>
+                {% endif %}</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <div class="card-title">
+            Список пользователей пуст
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

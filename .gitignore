@@ -1,0 +1,4 @@
+*.db
+static/avatars/*
+!static/avatars/README.md
+__pycache__

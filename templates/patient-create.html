@@ -1,0 +1,32 @@
+{% extends '__base_template.html' %}
+
+{% block content %}
+<form
+        action="/patient/create"
+        method="post"
+        enctype="multipart/form-data"
+
+        class="card"
+>
+    {{ form.hidden_tag() }}
+    <div class="card-body">
+        <div class="form-group">
+            <label for="{{ form.name.id }}">{{ form.name.label }}</label>
+            {{ form.name(class_="form-control") }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.address.id }}">{{ form.address.label }}</label>
+            {{ form.address(class_="form-control") }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.uchastok.id }}">{{ form.uchastok.label }}</label>
+            {{ form.uchastok(class_="form-control") }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.cardno.id }}">{{ form.cardno.label }}</label>
+            {{ form.cardno(class_="form-control") }}
+        </div>
+        {{ form.submit(class_="btn btn-primary") }}
+    </div>
+</form>
+{% endblock %}
