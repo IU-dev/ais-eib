@@ -15,6 +15,9 @@ from models.auth import Auth
 from models.patient import Patient
 from models.patient import PatientRepository
 from models.patient_create_form import PatientCreateForm
+from models.record import Record
+from models.record import RecordRepository
+from models.record_create_form import RecordCreateForm
 from api.v1 import init as init_api_v1
 
 
@@ -24,6 +27,7 @@ def init_route(app: Flask, db: DB):
     news_repository = NewsRepository(db)
     user_repository = UserRepository(db)
     patient_repository = PatientRepository(db)
+    record_repository = RecordRepository(db)
     auth = Auth(user_repository)
 
     # Переопределение стандартного рендера, добавляет параметр auth_user
@@ -94,6 +98,27 @@ def init_route(app: Flask, db: DB):
         return render_template(
             'user-create.html',
             title='Создать пользователя | АИС ЭИБ',
+            form=form
+        )
+
+    @app.route('/record', methods=['GET'])
+    def record_list():
+        record_list = record_repository.get_list()
+        return render_template(
+            'record-list.html',
+            title='Список записей | АИС ЭИБ',
+            record_list=record_list
+        )
+
+    @app.route('/record/create', methods=['GET', 'POST'])
+    def record_create_form():
+        form = RecordCreateForm(record_repository)
+        if form.validate_on_submit():
+            form.create_user()
+            return redirect('/record')
+        return render_template(
+            'record-create.html',
+            title='Создать запись | АИС ЭИБ',
             form=form
         )
 
